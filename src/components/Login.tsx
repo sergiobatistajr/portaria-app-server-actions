@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 import {
   Form,
@@ -36,6 +37,8 @@ const schema = z.object({
 });
 
 export default function Login() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -53,8 +56,12 @@ export default function Login() {
         password: values.password,
         redirect: false,
       });
-      if (res?.error) throw new Error(res.error);
+
+      if (!res || res?.error) throw new Error("Usuário ou senha inválidos");
+
       toast.success("Login realizado com sucesso");
+      form.reset();
+      router.refresh();
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);
     }
@@ -62,7 +69,10 @@ export default function Login() {
 
   return (
     <Form {...form}>
-      <form>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="container mx-auto space-y-2 mt-2"
+      >
         <FormField
           control={form.control}
           name="username"
