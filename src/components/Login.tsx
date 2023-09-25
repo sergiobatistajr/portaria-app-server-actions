@@ -2,6 +2,8 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { toast } from "react-hot-toast";
 
 import {
   Form,
@@ -45,7 +47,17 @@ export default function Login() {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
-    console.log(values);
+    try {
+      const res = await signIn("credentials", {
+        username: values.username,
+        password: values.password,
+        redirect: false,
+      });
+      if (res?.error) throw new Error(res.error);
+      toast.success("Login realizado com sucesso");
+    } catch (error) {
+      if (error instanceof Error) toast.error(error.message);
+    }
   };
 
   return (

@@ -89,9 +89,7 @@ export default function RegisterClient({
       toast.success("Usuário cadastrado com sucesso");
       form.reset();
     } catch (error) {
-      if (error instanceof Error) {
-        return toast.error(error.message);
-      }
+      if (error instanceof Error) toast.error(error.message);
     }
   };
 
