@@ -2,6 +2,7 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "react-hot-toast";
 
 import {
   Form,
@@ -11,8 +12,17 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+import { Role, User } from "@/api/types";
 
 const schema = z
   .object({
@@ -45,7 +55,16 @@ const schema = z
 
 const role = ["admin", "relatorio", "porteiro"] as const;
 
-export default function RegisterClient() {
+export default function RegisterClient({
+  createUserAction,
+}: {
+  createUserAction(
+    name: string,
+    username: string,
+    password: string,
+    role: Role
+  ): Promise<User>;
+}) {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -60,12 +79,28 @@ export default function RegisterClient() {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
-    console.log(data);
+    try {
+      await createUserAction(
+        data.name,
+        data.username,
+        data.password,
+        data.role
+      );
+      toast.success("Usuário cadastrado com sucesso");
+      form.reset();
+    } catch (error) {
+      if (error instanceof Error) {
+        return toast.error(error.message);
+      }
+    }
   };
 
   return (
     <Form {...form}>
-      <form>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="container mx-auto space-y-2 mt-2"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -89,6 +124,55 @@ export default function RegisterClient() {
                 <Input type="text" {...field} />
               </FormControl>
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Senha</FormLabel>
+              <FormControl>
+                <Input type="password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirm_password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confirmar Senha</FormLabel>
+              <FormControl>
+                <Input type="password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Função</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {role.map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {item}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </FormItem>
           )}
         />

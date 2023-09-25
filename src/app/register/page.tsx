@@ -1,5 +1,6 @@
 import { User, Role } from "@/api/types";
 import { createUser } from "@/api/users";
+import RegisterClient from "./_components/RegisterClient";
 
 export default async function RegisterPage() {
   const createUserAction = async (
@@ -8,8 +9,10 @@ export default async function RegisterPage() {
     password: string,
     role: Role
   ): Promise<User> => {
-    "use client";
+    "use server";
 
     return await createUser(name, username, password, role);
   };
+
+  return <RegisterClient createUserAction={createUserAction} />;
 }
