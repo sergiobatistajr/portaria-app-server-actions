@@ -16,11 +16,12 @@ export interface Guest {
   userId: string;
 }
 
-type Role = "ADMIN" | "RELATORIO" | "PORTEIRO";
+export type Role = "admin" | "relatorio" | "porteiro";
 
 export interface User {
   id: string;
   name: string;
+  username: string;
   hashedPassword: string;
   isActive: boolean;
   role: Role;
