@@ -1,16 +1,16 @@
 export interface Guest {
   id: string;
-  plate?: string;
+  plate: string | null;
   name: string;
   isInside: boolean;
-  apartment?: number;
-  observations?: string;
-  model?: string;
-  pax?: number;
+  apartment: number | null;
+  observations: string | null;
+  model: string | null;
+  pax: number | null;
   entryDate: Date;
   entryHour: string;
-  exitDate?: Date;
-  exitHour?: string;
+  exitDate: Date | null;
+  exitHour: string | null;
   createdAt: Date;
   updatedAt: Date;
   userId: string;
