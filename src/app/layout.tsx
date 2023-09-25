@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 import { auth } from "@/lib/auth";
 import Login from "@/components/Login";
+import AuthenticationPage from "@/components/AuthPage";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,7 +25,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ToasterProvider />
-        {session ? children : <Login />}
+        {session ? children : <AuthenticationPage />}
       </body>
     </html>
   );
