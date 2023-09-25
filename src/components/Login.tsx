@@ -42,6 +42,8 @@ export default function Login() {
     },
   });
 
+  const isLoading = form.formState.isSubmitting;
+
   const onSubmit = async (values: z.infer<typeof schema>) => {
     console.log(values);
   };
@@ -56,7 +58,7 @@ export default function Login() {
             <FormItem>
               <FormLabel>Usuário</FormLabel>
               <FormControl>
-                <Input type="text" {...field} />
+                <Input disabled={isLoading} type="text" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -69,14 +71,16 @@ export default function Login() {
             <FormItem>
               <FormLabel>Senha</FormLabel>
               <FormControl>
-                <Input type="password" {...field} />
+                <Input disabled={isLoading} type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
         <div>
-          <Button type="submit">Entrar</Button>
+          <Button disabled={isLoading} type="submit">
+            Entrar
+          </Button>
         </div>
       </form>
     </Form>
