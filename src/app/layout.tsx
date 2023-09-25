@@ -6,8 +6,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 import { auth } from "@/lib/auth";
-import Login from "@/components/Login";
-import AuthenticationPage from "@/components/AuthPage";
+import AuthenticationPage from "@/components/AuthClient";
 
 export const metadata: Metadata = {
   title: "Create Next App",
