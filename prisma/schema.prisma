@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin     @map("ADMIN")
+  porteiro  @map("PORTEIRO")
+  relatorio @map("RELATORIO")
+}
+
+model User {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  username       String   @unique
+  hashedPassword String
+  isActive       Boolean  @default(true)
+  role           Role     @default(porteiro)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  guests         Guest[]
+}
+
+model Guest {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  plate         String?
+  name          String
+  isInside      Boolean   @default(true)
+  apartment     Int?
+  observations  String?
+  model         String?
+  pax           Int?
+  entryDate     DateTime
+  exitDate      DateTime?
+  entryHour     String
+  exitHour      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  createdByUser User      @relation(fields: [userId], references: [id])
+  userId        String    @db.ObjectId
+}
