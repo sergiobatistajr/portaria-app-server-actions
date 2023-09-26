@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { User } from "@/api/types";
+import { signOut } from "next-auth/react";
 
 const schema = z.object({
   name: z
@@ -52,9 +53,12 @@ export default function EditProfile({
   const onSubmit = async (values: z.infer<typeof schema>) => {
     try {
       await updateUserAction(values.name, values.username);
-      toast.success("Perfil atualizado com sucesso, você será deslogado.");
 
-      router.refresh();
+      toast.success("Perfil atualizado com sucesso, você será deslogado.");
+      setTimeout(() => {
+        signOut();
+        router.refresh();
+      }, 2000);
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);
     }

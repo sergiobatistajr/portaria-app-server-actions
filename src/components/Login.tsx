@@ -62,6 +62,7 @@ export default function Login() {
       toast.success("Login realizado com sucesso");
       form.reset();
       router.refresh();
+      router.push("/");
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);
     }

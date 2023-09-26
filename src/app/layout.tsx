@@ -42,14 +42,15 @@ export default async function RootLayout({
                 <div className="border-b">
                   <div className="flex h-16 items-center px-4">
                     <MainNav role={session.user.role} />
-                    <div className="mx-6" />
+                    <div className="mx-auto" />
+
+                    <ToggleTheme />
+                    <div className="mx-2" />
                     <UserNav
                       username={session.user.username}
                       id={session.user.id}
                       name={session.user.name}
                     />
-                    <div className="mx-auto" />
-                    <ToggleTheme />
                   </div>
                 </div>
               </div>

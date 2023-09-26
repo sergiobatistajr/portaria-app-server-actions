@@ -39,7 +39,7 @@ export const updateUser = async (
     },
   });
 
-export const resetPassword = async (
+export const changePassword = async (
   id: string,
   password: string
 ): Promise<User> => {

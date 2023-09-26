@@ -3,6 +3,7 @@ import { getUser, updateUser } from "@/api/users";
 import { Header } from "@/components/Header";
 import EditProfile from "./_components/EditProfile";
 import { User } from "@/api/types";
+import { auth } from "@/lib/auth";
 
 export default async function ProfilePage({
   params,
@@ -11,14 +12,19 @@ export default async function ProfilePage({
     id: string;
   };
 }) {
+  const session = await auth();
   const user = await getUser(params.id);
-  if (!user) redirect("/");
+
+  if (!user) return redirect("/");
+
+  if (session?.user.id !== user.id) return redirect("/");
 
   const updateUserAction = async (
     name: string,
     username: string
   ): Promise<User> => {
     "use server";
+
     return await updateUser(params.id, name, username);
   };
 
