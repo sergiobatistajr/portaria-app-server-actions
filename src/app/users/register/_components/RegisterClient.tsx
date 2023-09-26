@@ -109,7 +109,7 @@ export default function RegisterClient({
               <FormItem>
                 <FormLabel>Nome e sobrenome</FormLabel>
                 <FormControl>
-                  <Input type="text" {...field} />
+                  <Input disabled={isLoading} type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -122,7 +122,7 @@ export default function RegisterClient({
               <FormItem>
                 <FormLabel>Usuário</FormLabel>
                 <FormControl>
-                  <Input type="text" {...field} />
+                  <Input disabled={isLoading} type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -135,7 +135,7 @@ export default function RegisterClient({
               <FormItem>
                 <FormLabel>Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input disabled={isLoading} type="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -148,7 +148,7 @@ export default function RegisterClient({
               <FormItem>
                 <FormLabel>Confirmar Senha</FormLabel>
                 <FormControl>
-                  <Input type="password" {...field} />
+                  <Input disabled={isLoading} type="password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -163,6 +163,7 @@ export default function RegisterClient({
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  disabled={isLoading}
                 >
                   <FormControl>
                     <SelectTrigger>

@@ -28,9 +28,9 @@ export const updateUser = async (
   id: string,
   name: string,
   username: string,
-  role: Role
-): Promise<User> => {
-  return await prismadb.user.update({
+  role?: Role
+): Promise<User> =>
+  await prismadb.user.update({
     where: { id },
     data: {
       name,
@@ -38,7 +38,6 @@ export const updateUser = async (
       role,
     },
   });
-};
 
 export const resetPassword = async (
   id: string,
