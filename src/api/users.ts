@@ -28,7 +28,8 @@ export const updateUser = async (
   id: string,
   name: string,
   username: string,
-  role?: Role
+  role?: Role,
+  isActive?: boolean
 ): Promise<User> =>
   await prismadb.user.update({
     where: { id },
@@ -36,6 +37,7 @@ export const updateUser = async (
       name,
       username,
       role,
+      isActive,
     },
   });
 

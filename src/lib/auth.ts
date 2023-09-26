@@ -60,6 +60,9 @@ export const options = {
         if (!user) {
           return null;
         }
+        if (user.isActive === false) {
+          return null;
+        }
 
         const isValid = await bcrypt.compare(
           credentials.password,
