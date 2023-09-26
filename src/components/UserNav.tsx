@@ -44,11 +44,11 @@ export function UserNav({
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => router.push(`/user/${id}`)}>
+          <DropdownMenuItem onClick={() => router.push(`/profile/${id}`)}>
             Editar perfil
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => router.push(`/user/password-reset/${id}`)}
+            onClick={() => router.push(`/profile/change-password/${id}`)}
           >
             Mudar senha
           </DropdownMenuItem>

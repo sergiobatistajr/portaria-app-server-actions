@@ -23,14 +23,17 @@ export function MainNav({ role }: { role: string }) {
       <nav className="flex items-center space-x-4 lg:space-x-6">
         <Menubar>
           <MenubarMenu>
-            <MenubarTrigger>Portaria</MenubarTrigger>
+            <MenubarTrigger className="relative">Portaria</MenubarTrigger>
             <MenubarContent>
-              <MenubarItem asChild>
-                <Link href="/car">Nova entrada de carro</Link>
-              </MenubarItem>
-              <MenubarItem asChild>
-                <Link href="/guest">Nova entrada de passante</Link>
-              </MenubarItem>
+              <MenubarSub>
+                <MenubarSubTrigger>Nova entrada</MenubarSubTrigger>
+                <MenubarSubContent>
+                  <MenubarItem>Carros</MenubarItem>
+                  <MenubarItem>Passantes</MenubarItem>
+                </MenubarSubContent>
+              </MenubarSub>
+              <MenubarSeparator />
+              <MenubarItem>Saídas</MenubarItem>
             </MenubarContent>
           </MenubarMenu>
           <MenubarMenu>
@@ -49,12 +52,26 @@ export function MainNav({ role }: { role: string }) {
           </MenubarMenu>
           {role === "admin" && (
             <MenubarMenu>
-              <MenubarTrigger>Sistema</MenubarTrigger>
-              <MenubarContent>
-                <MenubarItem asChild>
-                  <Link href="/register">Cadastrar Usuário</Link>
-                </MenubarItem>
-              </MenubarContent>
+              <MenubarMenu>
+                <MenubarTrigger className="relative">Sistema</MenubarTrigger>
+                <MenubarContent>
+                  <MenubarSub>
+                    <MenubarSubTrigger>Usuários</MenubarSubTrigger>
+                    <MenubarSubContent>
+                      <MenubarItem asChild>
+                        <Link href="/users/register">
+                          Cadastrar novo usuário
+                        </Link>
+                      </MenubarItem>
+                      <MenubarItem asChild>
+                        <Link href="/users">Mostrar usuários</Link>
+                      </MenubarItem>
+                    </MenubarSubContent>
+                  </MenubarSub>
+                  <MenubarSeparator />
+                  <MenubarItem>Corrigir entrada/saída</MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
             </MenubarMenu>
           )}
         </Menubar>
