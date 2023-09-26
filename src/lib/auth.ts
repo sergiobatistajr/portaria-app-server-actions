@@ -24,6 +24,7 @@ declare module "next-auth" {
   interface User {
     id: string;
     username: string;
+    name: string;
     role: string;
   }
 
@@ -31,6 +32,7 @@ declare module "next-auth" {
     user: {
       id: string;
       username: string;
+      name: string;
       role: string;
     } & DefaultSession["user"];
   }
@@ -77,6 +79,7 @@ export const options = {
       if (user) {
         token.id = user.id;
         token.username = user.username;
+        token.name = user.name;
         token.role = user.role;
       }
 
@@ -86,6 +89,7 @@ export const options = {
     session: async ({ session, token }) => {
       session.user.id = token.id;
       session.user.username = token.username;
+      session.user.name = token.name!;
       session.user.role = token.role;
 
       return session;

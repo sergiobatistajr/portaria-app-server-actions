@@ -7,6 +7,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 import { auth } from "@/lib/auth";
 import AuthenticationPage from "@/components/AuthClient";
+import { MainNav } from "@/components/NavMenu";
+import { UserNav } from "@/components/UserNav";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,7 +26,27 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ToasterProvider />
-        {session ? children : <AuthenticationPage />}
+
+        {session ? (
+          <div>
+            <div className="flex-col md:flex">
+              <div className="border-b">
+                <div className="flex h-16 items-center px-4">
+                  <MainNav role={session.user.role} />
+                  <div className="mx-6" />
+                  <UserNav
+                    username={session.user.username}
+                    id={session.user.id}
+                    name={session.user.name}
+                  />
+                </div>
+              </div>
+            </div>
+            {children}
+          </div>
+        ) : (
+          <AuthenticationPage />
+        )}
       </body>
     </html>
   );
