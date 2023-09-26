@@ -11,34 +11,20 @@ export const getGuest = async (id: string): Promise<Guest | null> =>
   await prismadb.guest.findFirst({ where: { id } });
 
 export const createGuest = async (
-  id: string,
   name: string,
   isInside: boolean,
   entryDate: Date,
   entryHour: string,
   userId: string,
-  plate?: string,
-  apartment?: number,
-  observations?: string,
-  model?: string,
-  pax?: number,
-  exitDate?: Date,
-  exitHour?: string
+  apartment?: number
 ): Promise<Guest> =>
   await prismadb.guest.create({
     data: {
-      id,
       name,
       isInside,
-      plate,
-      apartment,
-      observations,
-      model,
-      pax,
       entryDate,
       entryHour,
-      exitDate,
-      exitHour,
       userId,
+      apartment,
     },
   });

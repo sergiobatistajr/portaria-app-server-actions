@@ -3,14 +3,10 @@ import Link from "next/link";
 
 import {
   Menubar,
-  MenubarCheckboxItem,
   MenubarContent,
   MenubarItem,
   MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
   MenubarSeparator,
-  MenubarShortcut,
   MenubarSub,
   MenubarSubContent,
   MenubarSubTrigger,
@@ -28,12 +24,18 @@ export function MainNav({ role }: { role: string }) {
               <MenubarSub>
                 <MenubarSubTrigger>Nova entrada</MenubarSubTrigger>
                 <MenubarSubContent>
-                  <MenubarItem>Carros</MenubarItem>
-                  <MenubarItem>Passantes</MenubarItem>
+                  <MenubarItem asChild>
+                    <Link href="/portaria/car">Carros</Link>
+                  </MenubarItem>
+                  <MenubarItem asChild>
+                    <Link href="/portaria/guest">Passantes</Link>
+                  </MenubarItem>
                 </MenubarSubContent>
               </MenubarSub>
               <MenubarSeparator />
-              <MenubarItem>Saídas</MenubarItem>
+              <MenubarItem asChild>
+                <Link href="/portaria/exits">Saídas</Link>
+              </MenubarItem>
             </MenubarContent>
           </MenubarMenu>
           <MenubarMenu>
