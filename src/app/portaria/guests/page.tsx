@@ -12,7 +12,8 @@ export default async function GuestPage() {
     isInside: boolean,
     entryDate: Date,
     entryHour: string,
-    apartment?: number
+    apartment?: number,
+    observations?: string
   ): Promise<Guest> => {
     "use server";
 
@@ -22,7 +23,8 @@ export default async function GuestPage() {
       entryDate,
       entryHour,
       session?.user.id!,
-      apartment
+      apartment,
+      observations
     );
   };
   return (

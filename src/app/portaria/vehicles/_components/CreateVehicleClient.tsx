@@ -1,4 +1,6 @@
 "use client";
+
+"use client";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,35 +29,60 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { Guest } from "@/api/types";
+import { validateApartment } from "@/lib/validators/apartment";
+import { validateMercosul } from "@/lib/validators/mercosul";
+import { Textarea } from "@/components/ui/textarea";
 
 const schema = z.object({
-  name: z.string().min(3),
-  isInside: z.boolean(),
+  name: z.string().min(1, { message: "Nome e sobrenome é obrigatório" }),
   entryDate: z.date(),
-  entryHour: z.string(),
-  apartment: z.coerce.number().optional(),
+  entryHour: z.string().min(1, { message: "Hora de entrada é obrigatório" }),
+  pax: z.coerce.number().min(1, { message: "Número de pessoas é obrigatório" }),
+  plate: z
+    .string()
+    .min(1, {
+      message: "Placa é obrigatório",
+    })
+    .refine(validateMercosul, {
+      message: "Placa inválida",
+    }),
+  model: z.string().min(1, { message: "Modelo é obrigatório" }),
+  apartment: z.coerce.number().refine(validateApartment, {
+    message: "Apartamento inválido",
+  }),
+  isInside: z.boolean(),
+  observations: z.string(),
 });
 
-export default function GuestCreateClient({
-  createGuestAction,
+export default function CreateVehicleClient({
+  createVehicleGuestAction,
 }: {
-  createGuestAction: (
+  createVehicleGuestAction: (
     name: string,
-    isInside: boolean,
+    model: string,
+    pax: number,
     entryDate: Date,
     entryHour: string,
-    apartment?: number
+    isInside: boolean,
+    plate: string,
+    apartment?: number,
+    observations?: string
   ) => Promise<Guest>;
 }) {
   const router = useRouter();
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
-      isInside: true,
       entryDate: new Date(),
       entryHour: "",
+      pax: 1,
+      plate: "",
+      model: "",
       apartment: 0,
+      observations: "",
+      isInside: true,
     },
   });
 
@@ -63,13 +90,18 @@ export default function GuestCreateClient({
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     try {
-      await createGuestAction(
+      await createVehicleGuestAction(
         values.name,
-        values.isInside,
+        values.model,
+        values.pax,
         values.entryDate,
         values.entryHour,
-        values.apartment
+        values.isInside,
+        values.plate,
+        values.apartment,
+        values.observations
       );
+
       toast.success("Passante criado com sucesso!");
       form.reset();
       router.refresh();
@@ -83,7 +115,10 @@ export default function GuestCreateClient({
   return (
     <div className="container mx-auto flex justify-center">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-2 mb-10"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -91,9 +126,62 @@ export default function GuestCreateClient({
               <FormItem>
                 <FormLabel>Nome e sobrenome</FormLabel>
                 <FormControl>
-                  <Input disabled={isLoading} type="text" {...field} />
+                  <Input type="text" disabled={isLoading} {...field} />
                 </FormControl>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="plate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Placa</FormLabel>
+                <FormControl>
+                  <Input type="text" disabled={isLoading} {...field} />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>
+                  A placa precisa ser no formato válido do mercosul.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="model"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Modelo</FormLabel>
+                <FormControl>
+                  <Input
+                    type="text"
+                    disabled={isLoading}
+                    placeholder="Ex: Gol, Uno, Palio, etc..."
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>
+                  Caso não saiba o modelo, coloque a marca do veículo.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="pax"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Passageiros</FormLabel>
+                <FormControl>
+                  <Input type="number" disabled={isLoading} {...field} />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>
+                  Coloque a quantidade de passageiros no veículo.
+                </FormDescription>
               </FormItem>
             )}
           />
@@ -157,6 +245,26 @@ export default function GuestCreateClient({
           />
           <FormField
             control={form.control}
+            name="observations"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Observações?</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Observações sobre o visitante, como por exemplo, o motivo da visita."
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+                <FormDescription>
+                  Observações não são obrigatórias e não precisam ser
+                  preenchidas
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="apartment"
             render={({ field }) => (
               <FormItem>
@@ -166,19 +274,17 @@ export default function GuestCreateClient({
                     disabled={isLoading}
                     type="number"
                     {...field}
-                    className="w-1/2 pl-3 text-left font-normal"
+                    className="w-1/5 pl-3 text-left font-normal"
                   />
                 </FormControl>
                 <FormMessage />
                 <FormDescription className="w-4/6">
-                  Deixe em branco caso o visitante não esteja em um apartamento
+                  Deixe com 0 caso o visitante não esteja em um apartamento
                 </FormDescription>
               </FormItem>
             )}
           />
-          <Button disabled={isLoading} type="submit">
-            Salvar
-          </Button>
+          <Button type="submit">Salvar</Button>
         </form>
       </Form>
     </div>

@@ -25,10 +25,10 @@ export function MainNav({ role }: { role: string }) {
                 <MenubarSubTrigger>Nova entrada</MenubarSubTrigger>
                 <MenubarSubContent>
                   <MenubarItem asChild>
-                    <Link href="/portaria/car">Carros</Link>
+                    <Link href="/portaria/vehicles">Veículos</Link>
                   </MenubarItem>
                   <MenubarItem asChild>
-                    <Link href="/portaria/guest">Passantes</Link>
+                    <Link href="/portaria/guests">Passantes</Link>
                   </MenubarItem>
                 </MenubarSubContent>
               </MenubarSub>
