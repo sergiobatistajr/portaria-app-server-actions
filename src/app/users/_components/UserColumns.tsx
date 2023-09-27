@@ -14,22 +14,31 @@ import {
 import { Key, MoreHorizontal, Settings } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
+import { DataTableColumnHeader } from "./DataTableColumnHeader";
 export const userColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
-    header: "Nome",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Nome" />
+    ),
   },
   {
     accessorKey: "username",
-    header: "Usuário",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Usuário" />
+    ),
   },
   {
     accessorKey: "role",
-    header: "Função",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Função" />
+    ),
   },
   {
     accessorKey: "isActive",
-    header: "Status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
     cell: ({ row }) => (
       <Badge variant={row.original.isActive ? "secondary" : "destructive"}>
         {row.original.isActive ? "Ativo" : "Inativo"}
