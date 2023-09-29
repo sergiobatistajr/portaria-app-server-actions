@@ -4,7 +4,6 @@ import { z } from "zod";
 import { signOut } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
 import {
@@ -17,8 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-import { User } from "@/api/types";
+import { changePassword } from "@/api/users";
 
 const schema = z
   .object({
@@ -40,12 +38,7 @@ const schema = z
     path: ["confirm_password"],
   });
 
-export default function ChangePasswordClient({
-  changePasswordAction,
-}: {
-  changePasswordAction: (password: string) => Promise<User>;
-}) {
-  const router = useRouter();
+export default function ChangePasswordClient({ id }: { id: string }) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -58,12 +51,11 @@ export default function ChangePasswordClient({
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     try {
-      await changePasswordAction(values.password);
+      await changePassword(id, values.password);
 
       toast.success("Senha atualizada com sucesso, você será deslogado.");
       setTimeout(() => {
         signOut();
-        router.refresh();
       }, 2000);
     } catch (error) {
       if (error instanceof Error) {

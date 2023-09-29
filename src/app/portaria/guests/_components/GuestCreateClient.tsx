@@ -3,7 +3,6 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
 import {
   Form,
@@ -26,9 +25,9 @@ import { ptBR } from "date-fns/locale";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
-import { Guest } from "@/api/types";
 import { validateApartment } from "@/lib/validators/apartment";
 import { Textarea } from "@/components/ui/textarea";
+import { createGuest } from "@/api/guests";
 
 const schema = z.object({
   name: z.string().min(3, {
@@ -48,19 +47,7 @@ const schema = z.object({
     .optional(),
 });
 
-export default function GuestCreateClient({
-  createGuestAction,
-}: {
-  createGuestAction: (
-    name: string,
-    isInside: boolean,
-    entryDate: Date,
-    entryHour: string,
-    apartment?: number,
-    observations?: string
-  ) => Promise<Guest>;
-}) {
-  const router = useRouter();
+export default function GuestCreateClient({ userId }: { userId: string }) {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -77,17 +64,17 @@ export default function GuestCreateClient({
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     try {
-      await createGuestAction(
+      await createGuest(
         values.name,
         values.isInside,
         values.entryDate,
         values.entryHour,
+        userId,
         values.apartment,
         values.observations
       );
       toast.success("Passante criado com sucesso!");
       form.reset();
-      router.refresh();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);

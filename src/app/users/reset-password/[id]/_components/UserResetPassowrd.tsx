@@ -17,8 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { User } from "@/api/types";
-import { Separator } from "@/components/ui/separator";
+import { changePassword } from "@/api/users";
 
 const schema = z
   .object({
@@ -41,11 +40,11 @@ const schema = z
   });
 
 export default function ResetPasswordClient({
+  id,
   name,
-  resetPasswordAction,
 }: {
+  id: string;
   name: string;
-  resetPasswordAction: (password: string) => Promise<User>;
 }) {
   const router = useRouter();
   const form = useForm({
@@ -60,11 +59,9 @@ export default function ResetPasswordClient({
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     try {
-      await resetPasswordAction(values.password);
+      await changePassword(id, values.password);
 
       toast.success("Senha resetada com sucesso");
-
-      router.refresh();
       router.push("/users");
     } catch (error) {
       if (error instanceof Error) {

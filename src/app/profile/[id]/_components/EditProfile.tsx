@@ -3,7 +3,6 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
 import {
@@ -17,8 +16,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { User } from "@/api/types";
 import { signOut } from "next-auth/react";
+import { updateUser } from "@/api/users";
 
 const schema = z.object({
   name: z
@@ -33,16 +32,13 @@ const schema = z.object({
 
 export default function EditProfile({
   initialData,
-  updateUserAction,
 }: {
   initialData: {
+    id: string;
     name: string;
     username: string;
   };
-  updateUserAction: (name: string, username: string) => Promise<User>;
 }) {
-  const router = useRouter();
-
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: initialData,
@@ -52,12 +48,11 @@ export default function EditProfile({
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     try {
-      await updateUserAction(values.name, values.username);
+      await updateUser(initialData.id, values.name, values.username);
 
       toast.success("Perfil atualizado com sucesso, você será deslogado.");
       setTimeout(() => {
         signOut();
-        router.refresh();
       }, 2000);
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);

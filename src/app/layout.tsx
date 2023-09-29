@@ -12,7 +12,7 @@ import { UserNav } from "@/components/UserNav";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ToggleTheme } from "@/components/ToggleTheme";
 
-export const dynamic = "force-dynamic";
+// export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Create Next App",

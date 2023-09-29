@@ -22,8 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
-
-import { Role, User } from "@/api/types";
+import { createUser } from "@/api/users";
 
 const schema = z
   .object({
@@ -56,16 +55,7 @@ const schema = z
 
 const role = ["admin", "relatorio", "porteiro"] as const;
 
-export default function RegisterClient({
-  createUserAction,
-}: {
-  createUserAction(
-    name: string,
-    username: string,
-    password: string,
-    role: Role
-  ): Promise<User>;
-}) {
+export default function RegisterClient() {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -81,12 +71,7 @@ export default function RegisterClient({
 
   const onSubmit = async (data: z.infer<typeof schema>) => {
     try {
-      await createUserAction(
-        data.name,
-        data.username,
-        data.password,
-        data.role
-      );
+      await createUser(data.name, data.username, data.password, data.role);
       toast.success("Usuário cadastrado com sucesso");
       form.reset();
     } catch (error) {

@@ -14,20 +14,13 @@ export default async function ResetPasswordPage({
 
   if (!user) redirect("/users");
 
-  const resetPasswordAction = async (password: string) => {
-    "use server";
-    return await changePassword(user.id, password);
-  };
   return (
     <>
       <Header
         title="Resetar senha"
         subtitle="Preencha os campos abaixo para resetar a senha do usuário"
       />
-      <ResetPasswordClient
-        name={user.name}
-        resetPasswordAction={resetPasswordAction}
-      />
+      <ResetPasswordClient name={user.name} id={user.id} />
     </>
   );
 }

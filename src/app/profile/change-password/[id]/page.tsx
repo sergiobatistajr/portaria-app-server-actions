@@ -16,16 +16,10 @@ export default async function ResetPasswordPage({
 
   if (session?.user.id !== params.id) redirect("/profile");
 
-  const changePasswordAction = async (password: string): Promise<User> => {
-    "use server";
-
-    return await changePassword(params.id, password);
-  };
-
   return (
     <>
       <Header title="Mudar senha" subtitle="Digite sua nova senha" />
-      <ChangePasswordClient changePasswordAction={changePasswordAction} />
+      <ChangePasswordClient id={session.user.id} />
     </>
   );
 }

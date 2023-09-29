@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { Role, User } from "@/api/types";
+import { Role } from "@/api/types";
 import {
   Select,
   SelectContent,
@@ -27,7 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-
+import { updateUser } from "@/api/users";
 const schema = z.object({
   name: z
     .string()
@@ -45,19 +45,13 @@ const role = ["admin", "relatorio", "porteiro"] as const;
 
 export default function EditUser({
   initialData,
-  updateUserAction,
 }: {
   initialData: {
+    id: string;
     name: string;
     username: string;
     role: Role;
   };
-  updateUserAction: (
-    name: string,
-    username: string,
-    role: Role,
-    isActive: boolean
-  ) => Promise<User>;
 }) {
   const router = useRouter();
 
@@ -70,7 +64,8 @@ export default function EditUser({
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     try {
-      await updateUserAction(
+      await updateUser(
+        initialData.id,
         values.name,
         values.username,
         values.role,
@@ -78,7 +73,6 @@ export default function EditUser({
       );
 
       toast.success("Usuário atualizado com sucesso");
-      router.refresh();
       router.push("/users");
     } catch (error) {
       if (error instanceof Error) toast.error(error.message);

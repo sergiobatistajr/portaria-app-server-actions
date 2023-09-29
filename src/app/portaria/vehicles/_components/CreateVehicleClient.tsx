@@ -5,7 +5,6 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
 import {
   Form,
@@ -32,6 +31,7 @@ import { Guest } from "@/api/types";
 import { validateApartment } from "@/lib/validators/apartment";
 import { validateMercosul } from "@/lib/validators/mercosul";
 import { Textarea } from "@/components/ui/textarea";
+import { createVehicleGuest } from "@/api/guests";
 
 const schema = z.object({
   name: z.string().min(1, { message: "Nome e sobrenome é obrigatório" }),
@@ -54,23 +54,7 @@ const schema = z.object({
   observations: z.string(),
 });
 
-export default function CreateVehicleClient({
-  createVehicleGuestAction,
-}: {
-  createVehicleGuestAction: (
-    name: string,
-    model: string,
-    pax: number,
-    entryDate: Date,
-    entryHour: string,
-    isInside: boolean,
-    plate: string,
-    apartment?: number,
-    observations?: string
-  ) => Promise<Guest>;
-}) {
-  const router = useRouter();
-
+export default function CreateVehicleClient({ userId }: { userId: string }) {
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -90,12 +74,13 @@ export default function CreateVehicleClient({
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
     try {
-      await createVehicleGuestAction(
+      await createVehicleGuest(
         values.name,
         values.model,
         values.pax,
         values.entryDate,
         values.entryHour,
+        userId,
         values.isInside,
         values.plate,
         values.apartment,
@@ -104,7 +89,6 @@ export default function CreateVehicleClient({
 
       toast.success("Passante criado com sucesso!");
       form.reset();
-      router.refresh();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);

@@ -19,22 +19,13 @@ export default async function ProfilePage({
 
   if (session?.user.id !== user.id) return redirect("/");
 
-  const updateUserAction = async (
-    name: string,
-    username: string
-  ): Promise<User> => {
-    "use server";
-
-    return await updateUser(params.id, name, username);
-  };
-
   return (
     <>
       <Header
         title="Seu perfil"
         subtitle="Edite suas informações pessoais e de acesso."
       />
-      <EditProfile initialData={user} updateUserAction={updateUserAction} />
+      <EditProfile initialData={user} />
     </>
   );
 }

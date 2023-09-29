@@ -1,11 +1,17 @@
+"use server";
+import { revalidatePath } from "next/cache";
 import type { Guest } from "./types";
 import prismadb from "@/lib/prismadb";
+import { cache } from "react";
 
-export const getGuests = async (): Promise<Guest[]> =>
-  await prismadb.guest.findMany();
+export const getGuests = cache(
+  async (): Promise<Guest[]> => await prismadb.guest.findMany()
+);
 
-export const getGuestsInside = async (): Promise<Guest[]> =>
-  await prismadb.guest.findMany({ where: { isInside: true } });
+export const getGuestsInside = cache(
+  async (): Promise<Guest[]> =>
+    await prismadb.guest.findMany({ where: { isInside: true } })
+);
 
 export const getGuest = async (id: string): Promise<Guest | null> =>
   await prismadb.guest.findFirst({ where: { id } });
@@ -18,7 +24,7 @@ export const createGuest = async (
   userId: string,
   apartment?: number,
   observations?: string
-): Promise<Guest> =>
+): Promise<void> => {
   await prismadb.guest.create({
     data: {
       name,
@@ -30,6 +36,8 @@ export const createGuest = async (
       observations,
     },
   });
+  revalidatePath("/portaria/exits");
+};
 
 export const createVehicleGuest = async (
   name: string,
@@ -42,7 +50,7 @@ export const createVehicleGuest = async (
   plate: string,
   apartment?: number,
   observations?: string
-): Promise<Guest> =>
+): Promise<void> => {
   await prismadb.guest.create({
     data: {
       name,
@@ -57,3 +65,5 @@ export const createVehicleGuest = async (
       observations,
     },
   });
+  revalidatePath("/portaria/exits");
+};
