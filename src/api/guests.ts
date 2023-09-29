@@ -5,12 +5,16 @@ import prismadb from "@/lib/prismadb";
 import { cache } from "react";
 
 export const getGuests = cache(
-  async (): Promise<Guest[]> => await prismadb.guest.findMany()
+  async (): Promise<Guest[]> =>
+    await prismadb.guest.findMany({ orderBy: { updatedAt: "desc" } })
 );
 
 export const getGuestsInside = cache(
   async (): Promise<Guest[]> =>
-    await prismadb.guest.findMany({ where: { isInside: true } })
+    await prismadb.guest.findMany({
+      where: { isInside: true },
+      orderBy: { createdAt: "desc" },
+    })
 );
 
 export const getGuest = async (id: string): Promise<Guest | null> =>
@@ -63,6 +67,22 @@ export const createVehicleGuest = async (
       plate,
       apartment,
       observations,
+    },
+  });
+  revalidatePath("/portaria/exits");
+};
+
+export const createExitGuest = async (
+  id: string,
+  exitDate: Date,
+  exitHour: string
+): Promise<void> => {
+  await prismadb.guest.update({
+    where: { id },
+    data: {
+      isInside: false,
+      exitDate,
+      exitHour,
     },
   });
   revalidatePath("/portaria/exits");

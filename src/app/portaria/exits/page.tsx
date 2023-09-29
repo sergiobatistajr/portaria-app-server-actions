@@ -7,17 +7,19 @@ export default async function ExitsPage() {
   const guestsInside = await getGuestsInside();
 
   const formattedGuestsInside = guestsInside.map((guest) => {
-    const mouth = guest.entryDate.getMonth();
+    const month = guest.entryDate.getMonth() + 1;
     const day = guest.entryDate.getDate();
     const year = guest.entryDate.getFullYear();
     const hour = guest.entryHour;
     const plate = guest.plate ? guest.plate : " Passante";
     const apartment = guest.apartment ? guest.apartment.toString() : "-";
+    const id = guest.id;
 
     return {
+      id,
       nome: guest.name,
       dataDeEntrada: format(
-        new Date(`${mouth}/${day}/${year} ${hour}`),
+        new Date(`${year}/${month}/${day} ${hour}`),
         "yyy/MM/dd HH:mm"
       ),
       placa: plate,
@@ -35,13 +37,13 @@ export default async function ExitsPage() {
         <ExitGuestDataTable
           columns={columns}
           data={formattedGuestsInside}
-          acessorKey="name"
+          acessorKey="nome"
           headerLabel="nome"
-          acessorKey2="plate"
+          acessorKey2="placa"
           headerLabel2="placa"
-          acessorKey3="entryDate"
+          acessorKey3="dataDeEntrada"
           headerLabel3="data de entrada"
-          acessorKey4="apartment"
+          acessorKey4="apartamento"
           headerLabel4="apartamento"
         />
       </div>
