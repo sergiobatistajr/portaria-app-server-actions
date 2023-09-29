@@ -33,7 +33,7 @@ export function ExitGuestsViewOptions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>Alterar colunas</DropdownMenuLabel>
+        <DropdownMenuLabel>Alternar colunas</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()

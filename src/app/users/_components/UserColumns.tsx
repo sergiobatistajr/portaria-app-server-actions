@@ -8,40 +8,48 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Key, MoreHorizontal, Settings } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
-export const userColumns: ColumnDef<User>[] = [
+
+type UserColumnsProps = {
+  id: string;
+  nome: string;
+  usuário: string;
+  função: string;
+  status: boolean;
+};
+
+export const userColumns: ColumnDef<UserColumnsProps>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "nome",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nome" />
     ),
   },
   {
-    accessorKey: "username",
+    accessorKey: "usuário",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Usuário" />
     ),
   },
   {
-    accessorKey: "role",
+    accessorKey: "função",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Função" />
     ),
   },
   {
-    accessorKey: "isActive",
+    accessorKey: "status",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => (
-      <Badge variant={row.original.isActive ? "secondary" : "destructive"}>
-        {row.original.isActive ? "Ativo" : "Inativo"}
+      <Badge variant={row.original.status ? "secondary" : "destructive"}>
+        {row.original.status ? "Ativo" : "Inativo"}
       </Badge>
     ),
   },

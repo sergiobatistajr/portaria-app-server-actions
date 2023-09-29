@@ -2,21 +2,34 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Guest } from "@/api/types";
-import { format } from "date-fns";
 import { ExitGuestDataTableColumnHeader } from "./ExitGuestDataTableColumnHeader";
-
-export const columns: ColumnDef<Guest>[] = [
+type GuestClientDataTable = {
+  nome: string;
+  dataDeEntrada: string;
+  placa: string;
+  apartamento: string;
+};
+export const columns: ColumnDef<GuestClientDataTable>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "nome",
     header: "Nome",
   },
   {
-    accessorKey: "entryDate",
+    accessorKey: "dataDeEntrada",
     header: ({ column }) => (
       <ExitGuestDataTableColumnHeader column={column} title="Data de entrada" />
     ),
-    cell: ({ row }) => (
-      <div>{format(row.original.entryDate, "yyy/MM/dd HH:mm")}</div>
+  },
+  {
+    accessorKey: "placa",
+    header: ({ column }) => (
+      <ExitGuestDataTableColumnHeader column={column} title="Placa" />
+    ),
+  },
+  {
+    accessorKey: "apartamento",
+    header: ({ column }) => (
+      <ExitGuestDataTableColumnHeader column={column} title="Apartamento" />
     ),
   },
 ];

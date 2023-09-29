@@ -2,7 +2,7 @@ import { getGuestsInside } from "@/api/guests";
 import { ExitGuestDataTable } from "./_components/ExitGuestsDataTable";
 import { columns } from "./_components/ExitGuestsColumn";
 import { Header } from "@/components/Header";
-
+import { format } from "date-fns";
 export default async function ExitsPage() {
   const guestsInside = await getGuestsInside();
 
@@ -11,10 +11,17 @@ export default async function ExitsPage() {
     const day = guest.entryDate.getDate();
     const year = guest.entryDate.getFullYear();
     const hour = guest.entryHour;
-    return {
-      ...guest,
+    const plate = guest.plate ? guest.plate : " Passante";
+    const apartment = guest.apartment ? guest.apartment.toString() : "-";
 
-      entryDate: new Date(`${mouth}/${day}/${year} ${hour}`),
+    return {
+      nome: guest.name,
+      dataDeEntrada: format(
+        new Date(`${mouth}/${day}/${year} ${hour}`),
+        "yyy/MM/dd HH:mm"
+      ),
+      placa: plate,
+      apartamento: apartment,
     };
   });
 
@@ -25,7 +32,18 @@ export default async function ExitsPage() {
         subtitle="Lista de hóspedes que estão dentro do hotel"
       />
       <div className="container mx-auto">
-        <ExitGuestDataTable columns={columns} data={formattedGuestsInside} />
+        <ExitGuestDataTable
+          columns={columns}
+          data={formattedGuestsInside}
+          acessorKey="name"
+          headerLabel="nome"
+          acessorKey2="plate"
+          headerLabel2="placa"
+          acessorKey3="entryDate"
+          headerLabel3="data de entrada"
+          acessorKey4="apartment"
+          headerLabel4="apartamento"
+        />
       </div>
     </div>
   );
