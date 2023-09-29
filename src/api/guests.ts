@@ -4,6 +4,34 @@ import type { Guest } from "./types";
 import prismadb from "@/lib/prismadb";
 import { cache } from "react";
 
+export const dashboard = cache(
+  async (): Promise<
+    Array<{
+      month: string;
+      total: number;
+    }>
+  > => {
+    const guests = await prismadb.guest.findMany({
+      select: {
+        entryDate: true,
+      },
+    });
+    const months = guests.map((guest) => guest.entryDate.getMonth());
+    const monthsUnique = [...new Set(months)];
+    const monthsCount = monthsUnique.map((month) => {
+      const monthName = new Date(0, month).toLocaleString("pt-BR", {
+        month: "long",
+      });
+      const monthCount = months.filter((m) => m === month).length;
+      return {
+        month: monthName,
+        total: monthCount,
+      };
+    });
+    return monthsCount;
+  }
+);
+
 export const getGuests = cache(
   async (): Promise<Guest[]> =>
     await prismadb.guest.findMany({ orderBy: { updatedAt: "desc" } })

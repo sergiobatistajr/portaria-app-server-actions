@@ -71,7 +71,9 @@ export function MainNav({ role }: { role: string }) {
                     </MenubarSubContent>
                   </MenubarSub>
                   <MenubarSeparator />
-                  <MenubarItem>Corrigir entrada/saída</MenubarItem>
+                  <MenubarItem asChild>
+                    <Link href="/fix">Corrigir entrada/saída</Link>
+                  </MenubarItem>
                 </MenubarContent>
               </MenubarMenu>
             </MenubarMenu>
