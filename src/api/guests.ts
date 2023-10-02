@@ -1,5 +1,5 @@
 "use server";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import type { Guest } from "./types";
 import prismadb from "@/lib/prismadb";
 import { cache } from "react";
@@ -39,21 +39,13 @@ export const getGuests = cache(
     await prismadb.guest.findMany({ orderBy: { updatedAt: "desc" } })
 );
 
-// export const getGuestsInside = cache(
-//   async (): Promise<Guest[]> =>
-//     await prismadb.guest.findMany({
-//       where: { isInside: true },
-//       orderBy: { createdAt: "desc" },
-//     })
-// );
-
-export const getGuestsInside = async (): Promise<Guest[]> => {
-  const insiders = await fetch(`${URL}/insiders`, {
-    next: { tags: ["insiders"] },
-  });
-
-  return insiders.json();
-};
+export const getGuestsInside = cache(
+  async (): Promise<Guest[]> =>
+    await prismadb.guest.findMany({
+      where: { isInside: true },
+      orderBy: { createdAt: "desc" },
+    })
+);
 
 export const getGuest = async (id: string): Promise<Guest | null> =>
   await prismadb.guest.findFirst({ where: { id } });
