@@ -7,10 +7,9 @@ export default async function ExitsPage() {
   const guestsInside = await getGuestsInside();
 
   const formattedGuestsInside = guestsInside.map((guest) => {
-    const teste = new Date(guest.entryDate);
-    const month = teste.getMonth() + 1;
-    const day = teste.getDate();
-    const year = teste.getFullYear();
+    const month = guest.entryDate.getMonth() + 1;
+    const day = guest.entryDate.getDate();
+    const year = guest.entryDate.getFullYear();
     const hour = guest.entryHour;
     const plate = guest.plate ? guest.plate : " Passante";
     const apartment = guest.apartment ? guest.apartment.toString() : "-";
