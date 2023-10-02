@@ -33,16 +33,16 @@ export default async function ExitsPage() {
         title="Cadastrar saída"
         subtitle="Lista de hóspedes que estão dentro do hotel"
       />
-      <div className="container mx-auto">
+      <div className="container mx-auto mb-2">
         <ExitGuestDataTable
           columns={columns}
           data={formattedGuestsInside}
           acessorKey="nome"
           headerLabel="nome"
-          acessorKey2="placa"
-          headerLabel2="placa"
-          acessorKey3="dataDeEntrada"
-          headerLabel3="data de entrada"
+          acessorKey2="dataDeEntrada"
+          headerLabel2="data de entrada"
+          acessorKey3="placa"
+          headerLabel3="placa"
           acessorKey4="apartamento"
           headerLabel4="apartamento"
         />

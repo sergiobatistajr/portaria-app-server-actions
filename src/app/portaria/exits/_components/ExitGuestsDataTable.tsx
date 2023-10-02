@@ -8,6 +8,7 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
@@ -58,6 +59,7 @@ export function ExitGuestDataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
       columnFilters,

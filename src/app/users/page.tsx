@@ -24,7 +24,7 @@ export default async function UsersPage() {
   return (
     <div>
       <Header title="Usuários" subtitle="Gerencie os usuários do sistema" />
-      <div className="container mx-auto">
+      <div className="container mx-auto mb-2">
         <UserDataTable columns={userColumns} data={formattedUsers} />
       </div>
     </div>

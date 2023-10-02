@@ -7,6 +7,7 @@ import {
   SortingState,
   getSortedRowModel,
   useReactTable,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 
 import {
@@ -37,6 +38,7 @@ export function UserDataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
     },
