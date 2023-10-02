@@ -4,6 +4,8 @@ import type { Guest } from "./types";
 import prismadb from "@/lib/prismadb";
 import { cache } from "react";
 
+const URL = `${process.env.NEXTAUTH_URL}`;
+
 export const dashboard = cache(
   async (): Promise<
     Array<{
@@ -46,7 +48,7 @@ export const getGuests = cache(
 // );
 
 export const getGuestsInside = async (): Promise<Guest[]> => {
-  const insiders = await fetch("http://localhost:3000/insiders", {
+  const insiders = await fetch(`${URL}/insiders`, {
     next: { tags: ["insiders"] },
   });
 
