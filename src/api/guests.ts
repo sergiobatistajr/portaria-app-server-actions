@@ -39,21 +39,21 @@ export const getGuests = cache(
     await prismadb.guest.findMany({ orderBy: { updatedAt: "desc" } })
 );
 
-export const getGuestsInside = cache(
-  async (): Promise<Guest[]> =>
-    await prismadb.guest.findMany({
-      where: { isInside: true },
-      orderBy: { createdAt: "desc" },
-    })
-);
+// export const getGuestsInside = cache(
+//   async (): Promise<Guest[]> =>
+//     await prismadb.guest.findMany({
+//       where: { isInside: true },
+//       orderBy: { createdAt: "desc" },
+//     })
+// );
 
-// export const getGuestsInside = async (): Promise<Guest[]> => {
-//   const insiders = await fetch(`${URL}/insiders`, {
-//     next: { tags: ["insiders"] },
-//   });
+export const getGuestsInside = async (): Promise<Guest[]> => {
+  const insiders = await fetch(`${URL}/insiders`, {
+    next: { tags: ["insiders"] },
+  });
 
-//   return insiders.json();
-// };
+  return insiders.json();
+};
 
 export const getGuest = async (id: string): Promise<Guest | null> =>
   await prismadb.guest.findFirst({ where: { id } });
