@@ -14,6 +14,7 @@ import { Key, MoreHorizontal, Settings } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
+import UserColumnAction from "./UserColumnAction";
 
 type UserColumnsProps = {
   id: string;
@@ -57,33 +58,13 @@ export const userColumns: ColumnDef<UserColumnsProps>[] = [
     id: "actions",
     header: "Ações",
     cell: ({ row }) => {
-      const router = useRouter();
+      const id = row.original.id;
+
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Ações</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => router.push(`/users/${row.original.id}`)}
-            >
-              <Settings className="w-4 h-4 mx-1" />
-              Editar usuário
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                router.push(`/users/reset-password/${row.original.id}`)
-              }
-            >
-              <Key className="w-4 h-4 mx-1" />
-              Resetar senha
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <UserColumnAction
+          editProfilePath={`/users/${id}`}
+          resetPasswordPath={`/users/reset-password/${id}`}
+        />
       );
     },
   },
